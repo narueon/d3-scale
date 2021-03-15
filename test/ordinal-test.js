@@ -87,6 +87,29 @@ tape("ordinal.domain() does not coerce domain values to strings", function(test)
   test.end();
 });
 
+tape("ordinal() accepts dates", function(test) {
+  var s = scale.scaleOrdinal();
+  s(new Date(1970, 2, 1));
+  s(new Date(2001, 4, 13));
+  s(new Date(1970, 2, 1));
+  s(new Date(2001, 4, 13));
+  test.deepEqual(s.domain(), [new Date(1970, 2, 1), new Date(2001, 4, 13)]);
+  test.end();
+});
+
+tape("ordinal.domain() accepts dates", function(test) {
+  var s = scale.scaleOrdinal().domain([
+    new Date(1970, 2, 1),
+    new Date(2001, 4, 13),
+    new Date(1970, 2, 1),
+    new Date(2001, 4, 13)
+  ]);
+  s(new Date(1970, 2, 1));
+  s(new Date(1999, 11, 31));
+  test.deepEqual(s.domain(), [new Date(1970, 2, 1), new Date(2001, 4, 13), new Date(1999, 11, 31)]);
+  test.end();
+});
+
 tape("ordinal.domain() does not barf on object built-ins", function(test) {
   var s = scale.scaleOrdinal().domain(["__proto__", "hasOwnProperty"]).range([42, 43]);
   test.equal(s("__proto__"), 42);
